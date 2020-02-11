@@ -1,2 +1,2 @@
 # provoWorkshop
-Provo location workshop 
+Provo Utah location github workshop repository
