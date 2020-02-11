@@ -35,7 +35,12 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 		ID := params["id"]
 
 		if ID == "" {
-			//TODO get all
+			users, err := crud.GetAllUsers(w)
+			if err != nil {
+				return
+			}
+
+			json.NewEncoder(w).Encode(users)
 			return
 		}
 

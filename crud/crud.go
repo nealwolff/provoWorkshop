@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/nealwolff/provoWorkshop/client"
+	"github.com/nealwolff/provoWorkshop/types"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -58,4 +59,45 @@ func GetOne(collection, ID string, w http.ResponseWriter) (ret []byte, err error
 
 	return
 
+}
+
+//GetAll gets all the objects in a database
+func GetAll(collection string, w http.ResponseWriter) (*mongo.Cursor, error) {
+
+	col := client.GetCollection(collection)
+
+	cursor, err := col.Find(context.TODO(), bson.M{})
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+	}
+
+	return cursor, err
+
+}
+
+//GetAllUsers gets all the users from the user collection
+func GetAllUsers(w http.ResponseWriter) ([]types.User, error) {
+	var users []types.User
+
+	cursor, err := GetAll("users", w)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = cursor.All(context.TODO(), &users)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return users, err
+	}
+
+	if len(users) < 1 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("No users found"))
+	}
+	return users, err
 }
