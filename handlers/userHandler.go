@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/nealwolff/provoWorkshop/crud"
 	"github.com/nealwolff/provoWorkshop/types"
 )
@@ -28,6 +29,23 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		json.NewEncoder(w).Encode(ret)
+	} else if r.Method == http.MethodGet {
+		params := mux.Vars(r)
+
+		ID := params["id"]
+
+		if ID == "" {
+			//TODO get all
+			return
+		}
+
+		data, err := crud.GetOne("users", ID, w)
+
+		if err != nil {
+			return
+		}
+
+		w.Write(data)
 	}
 
 }

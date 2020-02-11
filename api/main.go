@@ -14,6 +14,7 @@ func main() {
 
 	theRouter.HandleFunc("/route", hand.BasicHandler).Methods(http.MethodGet)
 	theRouter.HandleFunc("/users", hand.UserHandler).Methods(http.MethodPost)
+	theRouter.HandleFunc("/users/{id}", hand.UserHandler).Methods(http.MethodGet)
 
 	log.Println("The API is listening")
 	http.ListenAndServe(":8080", theRouter)
