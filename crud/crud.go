@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/nealwolff/provoWorkshop/client"
 	"github.com/nealwolff/provoWorkshop/types"
@@ -100,4 +101,32 @@ func GetAllUsers(w http.ResponseWriter) ([]types.User, error) {
 		w.Write([]byte("No users found"))
 	}
 	return users, err
+}
+
+//Update updates a doument in the database
+func Update(collection, ID string, data interface{}, w http.ResponseWriter) (*mongo.UpdateResult, error) {
+	IDobj, err := primitive.ObjectIDFromHex(ID)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return nil, err
+	}
+
+	col := client.GetCollection(collection)
+
+	filter := bson.M{
+		"_id": IDobj,
+	}
+
+	opts := options.Replace().SetUpsert(true)
+
+	result, err := col.ReplaceOne(context.TODO(), filter, data, opts)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+	}
+
+	return result, err
 }
