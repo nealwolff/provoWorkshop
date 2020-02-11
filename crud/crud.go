@@ -7,8 +7,8 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/globalsign/mgo/bson"
 	"github.com/nealwolff/provoWorkshop/client"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
