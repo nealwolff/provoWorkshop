@@ -12,7 +12,7 @@ ENV CGO_ENABLED 0
 WORKDIR /go/src/github.com/nealwolff/provoWorkshop/api
 RUN go test -c -o tests
 
-RUN CGO_ENABLED=0 GOOS=linux go install provoWorkshop/api
+RUN CGO_ENABLED=0 GOOS=linux go install github.com/nealwolff/provoWorkshop/api
 
 #final image stage
 FROM alpine:latest
