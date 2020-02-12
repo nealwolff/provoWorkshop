@@ -5,7 +5,7 @@ services:
         container_name: 'api'
         build: "./"
         ports:
-            -'8080:8080'
+            - '8080:8080'
         volumes:
             - './api:/api'
         depends_on: 
@@ -13,4 +13,4 @@ services:
     mongo:
         image: 'mongo:latest'
         ports:
-            -'27017:27017'
+            - '27017:27017'
