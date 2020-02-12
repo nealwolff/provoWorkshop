@@ -3,6 +3,9 @@ FROM golang:1.10.3 as builder
 
 WORKDIR /go/src/github.com/nealwolff/provoWorkshop
 
+RUN go get github.com/gorilla/mux && \
+    go get go.mongodb.org/mongo-driver || true
+
 COPY . .
 
 ENV CGO_ENABLED 0
