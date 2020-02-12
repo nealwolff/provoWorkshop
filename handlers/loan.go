@@ -26,7 +26,11 @@ func AmoritizationHandler(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(userRaw, &user)
 
 	if loan, ok := user.Loans[loanID]; ok {
-		aSched := loan.CalculateASchedule()
+
+		schedChan := make(chan types.AmortizationSched)
+		go loan.CalculateASchedule(schedChan)
+
+		aSched := <-schedChan
 
 		ret, _ := json.MarshalIndent(aSched, "", "    ")
 		w.Write(ret)

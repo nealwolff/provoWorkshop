@@ -23,7 +23,7 @@ type Loan struct {
 }
 
 //CalculateASchedule calculates the amortization schedule
-func (data *Loan) CalculateASchedule() AmortizationSched {
+func (data *Loan) CalculateASchedule(schedChan chan AmortizationSched) {
 
 	aSched := AmortizationSched{OriginalBalance: data.Balance}
 
@@ -77,7 +77,7 @@ func (data *Loan) CalculateASchedule() AmortizationSched {
 			break
 		}
 	}
-	return aSched
+	schedChan <- aSched
 }
 
 //AmortizationSched represents the Amortization Schedule data structure for the customer's loan
